@@ -121,7 +121,7 @@ export default function ReportIssue() {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [errors, setErrors] = useState({});
 
-  // ✅ Get base API URL from environment variable
+  // ✅ Base API URL from environment variable
   const API_BASE_URL =
     import.meta.env.VITE_API_URL || "https://civix-sqp4.onrender.com";
 
@@ -183,11 +183,11 @@ export default function ReportIssue() {
         data.append("location", formData.location);
         if (file) data.append("file", file);
 
-        // ✅ Call the Render backend API
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/issues`, {
-  method: "POST",
-  body: data,
-});
+        // ✅ Use API_BASE_URL (not import.meta.env directly)
+        const response = await fetch(`${API_BASE_URL}/api/issues`, {
+          method: "POST",
+          body: data,
+        });
 
         if (response.ok) {
           const result = await response.json();
