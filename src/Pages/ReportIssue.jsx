@@ -184,10 +184,10 @@ export default function ReportIssue() {
         if (file) data.append("file", file);
 
         // ✅ Call the Render backend API
-        const response = await fetch(`${API_BASE_URL}/api/issues`, {
-          method: "POST",
-          body: data,
-        });
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/issues`, {
+  method: "POST",
+  body: data,
+});
 
         if (response.ok) {
           const result = await response.json();
