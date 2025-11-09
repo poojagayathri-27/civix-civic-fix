@@ -71,7 +71,7 @@ const ProfileSetup = ({onComplete}) => {
         try {
           const fd = new FormData();
           fd.append('image', profileImageFile);
-          const uploadRes = await csrfManager.secureFetch(`http://localhost:5000/api/profile/${user.id}/profile-picture`, {
+          const uploadRes = await csrfManager.secureFetch(`http://civix-sqp4.onrender.com:5000/api/profile/${user.id}/profile-picture`, {
             method: 'POST',
             body: fd
           });
@@ -103,7 +103,7 @@ const ProfileSetup = ({onComplete}) => {
       console.log(localStorage.getItem("profileComplete"));
       onComplete();
       
-      const profileResponse = await csrfManager.secureFetch('http://localhost:5000/api/profile/create-or-update', {
+      const profileResponse = await csrfManager.secureFetch('http://civix-sqp4.onrender.com:5000/api/profile/create-or-update', {
         method: 'POST',
         body: JSON.stringify({
           clerkUserId: user.id,

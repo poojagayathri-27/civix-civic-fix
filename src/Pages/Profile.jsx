@@ -94,7 +94,7 @@ const Profile = () => {
     }
     setIsSaving(true);
     try {
-      const profileResponse = await csrfManager.secureFetch('http://localhost:5000/api/profile/create-or-update', {
+      const profileResponse = await csrfManager.secureFetch('http://civix-sqp4.onrender.com:5000/api/profile/create-or-update', {
         method: 'POST',
         body: JSON.stringify({
           clerkUserId: clerkUser.id,

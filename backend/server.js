@@ -6,15 +6,16 @@ const issueRoutes = require("./routes/issues");
 
 const app = express();
 
-// ✅ CORS — allow frontend on localhost:3000
+// ✅ CORS — allow frontend on civix-sqp4.onrender.com:3000
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      "http://civix-sqp4.onrender.com:3000",
       "http://127.0.0.1:3000",
-      "http://localhost:5173",
+      "http://civix-sqp4.onrender.com:5173",
       "http://127.0.0.1:5173",
-    ],
+      "https://civix-frontend.vercel.app"
+      ],
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   })
@@ -50,5 +51,5 @@ mongoose
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://civix-sqp4.onrender.com:${PORT}`);
 });

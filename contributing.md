@@ -58,7 +58,7 @@ createdb civix
 Edit your configuration (typically a .env) to connect to your Postgres database:
 ```bash
 DB_NAME=civix
-DB_HOST=localhost
+DB_HOST=civix-sqp4.onrender.com
 DB_PORT=5432
 DB_USER=your_username
 DB_PASSWORD=your_pass

@@ -155,12 +155,12 @@ Civix now includes a standalone interactive simulator that allows users to step 
 ### Authentication
 ```bash
 # Register new user
-curl -X POST http://localhost:5000/api/auth/signup \
+curl -X POST http://civix-sqp4.onrender.com:5000/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{"username":"john_doe","email":"john@example.com","password":"password123"}'
 
 # Login user
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST http://civix-sqp4.onrender.com:5000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"john@example.com","password":"password123"}'
 ```
@@ -168,10 +168,10 @@ curl -X POST http://localhost:5000/api/auth/login \
 ### Issue Management
 ```bash
 # Get all issues
-curl -X GET http://localhost:5000/api/issues
+curl -X GET http://civix-sqp4.onrender.com:5000/api/issues
 
 # Create new issue with image
-curl -X POST http://localhost:5000/api/issues \
+curl -X POST http://civix-sqp4.onrender.com:5000/api/issues \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -F "title=Pothole on Main Street" \
   -F "description=Large pothole causing traffic issues" \
@@ -180,14 +180,14 @@ curl -X POST http://localhost:5000/api/issues \
   -F "file=@/path/to/image.jpg"
 
 # Update issue status (Admin only)
-curl -X PATCH http://localhost:5000/api/issues/1/status \
+curl -X PATCH http://civix-sqp4.onrender.com:5000/api/issues/1/status \
   -H "Authorization: Bearer ADMIN_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"status":"in-progress"}'
 ```
 
 ### API Documentation
-- **Swagger UI**: `http://localhost:5000/api-docs`
+- **Swagger UI**: `http://civix-sqp4.onrender.com:5000/api-docs`
 - **Interactive testing** of all endpoints
 - **Complete schema documentation**
 - **Authentication examples**  

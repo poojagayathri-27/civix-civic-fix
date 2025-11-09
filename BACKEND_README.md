@@ -18,8 +18,8 @@ npm run dev
 ## 📡 API Documentation
 
 ### Base URL
-- **Development**: `http://localhost:5000/api`
-- **Swagger UI**: `http://localhost:5000/api-docs`
+- **Development**: `http://civix-sqp4.onrender.com:5000/api`
+- **Swagger UI**: `http://civix-sqp4.onrender.com:5000/api-docs`
 
 ## 🔐 Authentication
 
@@ -157,7 +157,7 @@ PORT=5000
 NODE_ENV=development
 
 # Database
-DB_HOST=localhost
+DB_HOST=civix-sqp4.onrender.com
 DB_PORT=5432
 DB_NAME=civix_db
 DB_USER=your_username
@@ -182,12 +182,12 @@ EMAIL_PASS=your_app_password
 ### Test Authentication
 ```bash
 # Register
-curl -X POST http://localhost:5000/api/auth/signup \
+curl -X POST http://civix-sqp4.onrender.com:5000/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{"username":"testuser","email":"test@example.com","password":"password123"}'
 
 # Login
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST http://civix-sqp4.onrender.com:5000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"password123"}'
 ```
@@ -195,10 +195,10 @@ curl -X POST http://localhost:5000/api/auth/login \
 ### Test Issues API
 ```bash
 # Get all issues
-curl -X GET http://localhost:5000/api/issues
+curl -X GET http://civix-sqp4.onrender.com:5000/api/issues
 
 # Create issue with file
-curl -X POST http://localhost:5000/api/issues \
+curl -X POST http://civix-sqp4.onrender.com:5000/api/issues \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -F "title=Test Issue" \
   -F "description=Test Description" \
@@ -257,7 +257,7 @@ npm run dev
 NODE_ENV=production npm start
 
 # Check API documentation
-open http://localhost:5000/api-docs
+open http://civix-sqp4.onrender.com:5000/api-docs
 ```
 
 ## 📈 Performance Features

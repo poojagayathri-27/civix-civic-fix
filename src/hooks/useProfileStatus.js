@@ -16,7 +16,7 @@ const useProfileStatus = () => {
     try {
       console.log('Fetching profile data for user:', user.id);
       // The API endpoint expects clerkUserId, not just id
-      const response = await fetch(`http://localhost:5000/api/profile/${user.id}`, {
+      const response = await fetch(`http://civix-sqp4.onrender.com:5000/api/profile/${user.id}`, {
         credentials: 'include',
       });
       

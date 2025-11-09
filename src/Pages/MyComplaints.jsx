@@ -9,7 +9,7 @@ const MyComplaints = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/issues");
+        const res = await fetch("http://civix-sqp4.onrender.com:5000/api/issues");
         if (!res.ok) throw new Error("Failed to fetch complaints");
         const data = await res.json();
         setComplaintsData(data.reverse()); // newest first

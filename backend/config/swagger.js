@@ -10,13 +10,14 @@ const options = {
       description: 'API documentation for Civix - Civic Issue Reporting Platform',
     },
     servers: [
-      {
-        url: process.env.NODE_ENV === 'production' 
-          ? 'https://your-production-url.com/api' 
-          : 'http://localhost:5000/api',
-        description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server',
-      },
-    ],
+  {
+    url: process.env.NODE_ENV === 'production'
+      ? 'https://civix-sqp4.onrender.com/api'
+      : 'http://civix-sqp4.onrender.com:5000/api',
+    description: process.env.NODE_ENV === 'production' ? 'Render (Live)' : 'Local',
+  },
+],
+
     components: {
       securitySchemes: {
         bearerAuth: {

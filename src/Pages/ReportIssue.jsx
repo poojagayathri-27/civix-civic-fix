@@ -152,7 +152,7 @@ export default function ReportIssue() {
     if (file) data.append("file", file);
 
     // Send POST request to your backend API
-    const response = await fetch("http://localhost:5000/api/issues", {
+    const response = await fetch("http://civix-sqp4.onrender.com:5000/api/issues", {
       method: "POST",
       body: data,
     });
