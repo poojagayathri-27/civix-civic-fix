@@ -10,7 +10,22 @@ import {
 } from "lucide-react";
 import { useState, useCallback, useMemo, useEffect } from "react";
 
-const FormInput = ({ type = "text", id, label, placeholder, value, onChange, required = false, rows, icon: Icon, disabled = false, error }) => {
+// ==========================
+// 🧩 Helper Input Component
+// ==========================
+const FormInput = ({
+  type = "text",
+  id,
+  label,
+  placeholder,
+  value,
+  onChange,
+  required = false,
+  rows,
+  icon: Icon,
+  disabled = false,
+  error,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -22,7 +37,11 @@ const FormInput = ({ type = "text", id, label, placeholder, value, onChange, req
       <div className="relative">
         {Icon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-            <Icon className={`w-5 h-5 ${isFocused ? "text-emerald-500" : "text-gray-400"}`} />
+            <Icon
+              className={`w-5 h-5 ${
+                isFocused ? "text-emerald-500" : "text-gray-400"
+              }`}
+            />
           </div>
         )}
         {type === "textarea" ? (
@@ -37,14 +56,16 @@ const FormInput = ({ type = "text", id, label, placeholder, value, onChange, req
             disabled={disabled}
             className={`w-full rounded-lg border bg-white shadow-sm transition-all duration-200
               ${Icon ? "pl-10" : "pl-3"} pr-3 py-2.5
-              ${error
-                ? "border-red-300 ring-2 ring-red-100"
-                : isFocused
-                ? "border-emerald-300 ring-2 ring-emerald-100"
-                : "border-gray-200 hover:border-emerald-200"
+              ${
+                error
+                  ? "border-red-300 ring-2 ring-red-100"
+                  : isFocused
+                  ? "border-emerald-300 ring-2 ring-emerald-100"
+                  : "border-gray-200 hover:border-emerald-200"
               }
-              ${disabled ? "opacity-60 cursor-not-allowed" : ""}
-              placeholder:text-gray-400 text-gray-900 focus:outline-none resize-y min-h-[100px]
+              ${
+                disabled ? "opacity-60 cursor-not-allowed" : ""
+              } placeholder:text-gray-400 text-gray-900 focus:outline-none resize-y min-h-[100px]
             `}
             required={required}
           />
@@ -60,14 +81,16 @@ const FormInput = ({ type = "text", id, label, placeholder, value, onChange, req
             disabled={disabled}
             className={`w-full rounded-lg border bg-white shadow-sm transition-all duration-200
               ${Icon ? "pl-10" : "pl-3"} pr-3 py-2.5
-              ${error
-                ? "border-red-300 ring-2 ring-red-100"
-                : isFocused
-                ? "border-emerald-300 ring-2 ring-emerald-100"
-                : "border-gray-200 hover:border-emerald-200"
+              ${
+                error
+                  ? "border-red-300 ring-2 ring-red-100"
+                  : isFocused
+                  ? "border-emerald-300 ring-2 ring-emerald-100"
+                  : "border-gray-200 hover:border-emerald-200"
               }
-              ${disabled ? "opacity-60 cursor-not-allowed" : ""}
-              placeholder:text-gray-400 text-gray-900 focus:outline-none
+              ${
+                disabled ? "opacity-60 cursor-not-allowed" : ""
+              } placeholder:text-gray-400 text-gray-900 focus:outline-none
             `}
             required={required}
           />
@@ -82,6 +105,9 @@ const FormInput = ({ type = "text", id, label, placeholder, value, onChange, req
   );
 };
 
+// ==========================
+// 🚀 Main Component
+// ==========================
 export default function ReportIssue() {
   const [formData, setFormData] = useState({
     phone: "",
@@ -95,6 +121,11 @@ export default function ReportIssue() {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [errors, setErrors] = useState({});
 
+  // ✅ Get base API URL from environment variable
+  const API_BASE_URL =
+    import.meta.env.VITE_API_URL || "https://civix-sqp4.onrender.com";
+
+  // ✅ Validate form fields
   const validateForm = useCallback(() => {
     let newErrors = {};
     if (!/^\+?[0-9]{7,15}$/.test(formData.phone)) {
@@ -116,102 +147,153 @@ export default function ReportIssue() {
     return Object.keys(newErrors).length === 0;
   }, [formData]);
 
-  const handleInputChange = useCallback((field) => (e) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    setErrors((prev) => ({ ...prev, [field]: null }));
-  }, []);
+  // ✅ Handle input changes
+  const handleInputChange = useCallback(
+    (field) => (e) => {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+      setErrors((prev) => ({ ...prev, [field]: null }));
+    },
+    []
+  );
 
+  // ✅ Handle file upload
   const handleFileChange = useCallback((e) => {
     setFile(e.target.files[0]);
   }, []);
 
-  const downloadReceipt = useCallback((data) => {
-    console.log("Generating receipt for:", data);
-    alert("Receipt would be downloaded in real implementation!");
-  }, []);
+  // ✅ Submit form
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-  const handleSubmit = useCallback(async (e) => {
-  e.preventDefault();
+      if (isSubmitting) return;
+      if (!validateForm()) {
+        setSubmitStatus("error");
+        return;
+      }
 
-  if (isSubmitting) return;
-  if (!validateForm()) {
-    setSubmitStatus("error");
-    return;
-  }
+      setIsSubmitting(true);
 
-  setIsSubmitting(true);
+      try {
+        const data = new FormData();
+        data.append("phone", formData.phone);
+        data.append("email", formData.email);
+        data.append("title", formData.title);
+        data.append("description", formData.description);
+        data.append("location", formData.location);
+        if (file) data.append("file", file);
 
-  try {
-    // Create a form data object for sending text + optional file
-    const data = new FormData();
-    data.append("phone", formData.phone);
-    data.append("email", formData.email);
-    data.append("title", formData.title);
-    data.append("description", formData.description);
-    data.append("location", formData.location);
-    if (file) data.append("file", file);
+        // ✅ Call the Render backend API
+        const response = await fetch(`${API_BASE_URL}/api/issues`, {
+          method: "POST",
+          body: data,
+        });
 
-    // Send POST request to your backend API
-    const response = await fetch("http://civix-sqp4.onrender.com:5000/api/issues", {
-      method: "POST",
-      body: data,
-    });
+        if (response.ok) {
+          const result = await response.json();
+          console.log("✅ Issue submitted successfully:", result);
+          alert("✅ Issue reported successfully!");
+          setSubmitStatus("success");
 
-    if (response.ok) {
-      const result = await response.json();
-      console.log("✅ Issue submitted successfully:", result);
-      alert("✅ Issue reported successfully!");
-      setSubmitStatus("success");
+          setFormData({
+            phone: "",
+            email: "",
+            title: "",
+            description: "",
+            location: "",
+          });
+          setFile(null);
+        } else {
+          console.error("Failed to submit issue:", response.status);
+          alert("❌ Failed to submit issue.");
+          setSubmitStatus("error");
+        }
+      } catch (err) {
+        console.error("Submit error:", err);
+        alert("⚠️ Error connecting to server.");
+        setSubmitStatus("error");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [formData, file, isSubmitting, validateForm, API_BASE_URL]
+  );
 
-      // Reset form
-      setFormData({
-        phone: "",
-        email: "",
-        title: "",
-        description: "",
-        location: "",
-      });
-      setFile(null);
-    } else {
-      console.error("Failed to submit issue:", response.status);
-      alert("❌ Failed to submit issue.");
-      setSubmitStatus("error");
-    }
-  } catch (err) {
-    console.error("Submit error:", err);
-    alert("⚠️ Error connecting to server.");
-    setSubmitStatus("error");
-  } finally {
-    setIsSubmitting(false);
-  }
-}, [formData, file, isSubmitting, validateForm]);
-
-
-  const formFields = useMemo(() => [
-    { id: "phone", type: "tel", label: "Phone Number", placeholder: "+91 98765 43210", required: true, icon: Phone },
-    { id: "email", type: "email", label: "Email Address", placeholder: "you@example.com", required: true, icon: Mail },
-    { id: "title", type: "text", label: "Issue Title", placeholder: "Brief description of the issue", required: true, icon: FileText },
-    { id: "description", type: "textarea", label: "Detailed Description", placeholder: "Please provide comprehensive details about the issue.", rows: 4, required: true, icon: MessageSquare },
-    { id: "location", type: "text", label: "Location", placeholder: "Detecting location...", required: true, icon: MapPin },
-  ], []);
-
+  // ✅ Auto-detect location
   useEffect(() => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
         try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+          );
           const data = await res.json();
-          setFormData((prev) => ({ ...prev, location: data.display_name || `${latitude}, ${longitude}` }));
+          setFormData((prev) => ({
+            ...prev,
+            location: data.display_name || `${latitude}, ${longitude}`,
+          }));
         } catch {
-          setFormData((prev) => ({ ...prev, location: `${latitude}, ${longitude}` }));
+          setFormData((prev) => ({
+            ...prev,
+            location: `${latitude}, ${longitude}`,
+          }));
         }
       },
       () => console.warn("Geolocation not available")
     );
   }, []);
 
+  // ✅ Form fields
+  const formFields = useMemo(
+    () => [
+      {
+        id: "phone",
+        type: "tel",
+        label: "Phone Number",
+        placeholder: "+91 98765 43210",
+        required: true,
+        icon: Phone,
+      },
+      {
+        id: "email",
+        type: "email",
+        label: "Email Address",
+        placeholder: "you@example.com",
+        required: true,
+        icon: Mail,
+      },
+      {
+        id: "title",
+        type: "text",
+        label: "Issue Title",
+        placeholder: "Brief description of the issue",
+        required: true,
+        icon: FileText,
+      },
+      {
+        id: "description",
+        type: "textarea",
+        label: "Detailed Description",
+        placeholder: "Please provide comprehensive details about the issue.",
+        rows: 4,
+        required: true,
+        icon: MessageSquare,
+      },
+      {
+        id: "location",
+        type: "text",
+        label: "Location",
+        placeholder: "Detecting location...",
+        required: true,
+        icon: MapPin,
+      },
+    ],
+    []
+  );
+
+  // ✅ Render form UI
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30 flex items-center justify-center p-6">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -224,8 +306,12 @@ export default function ReportIssue() {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-emerald-100 rounded-2xl mb-4">
             <AlertCircle className="w-7 h-7 text-emerald-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Report an Issue</h1>
-          <p className="text-gray-600 text-sm">Help us improve by reporting any problems you've encountered.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Report an Issue
+          </h1>
+          <p className="text-gray-600 text-sm">
+            Help us improve by reporting any problems you've encountered.
+          </p>
         </div>
 
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 space-y-6">
@@ -251,11 +337,21 @@ export default function ReportIssue() {
                 disabled={isSubmitting}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <div className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
-                file ? "border-emerald-300 bg-emerald-50/50" : "border-gray-300 hover:border-emerald-300 hover:bg-emerald-50/30"
-              } ${isSubmitting ? "opacity-60" : ""}`}>
-                <Upload className={`w-6 h-6 mx-auto mb-2 ${file ? "text-emerald-500" : "text-gray-400"}`} />
-                <p className="text-sm text-gray-600">{file ? file.name : "Click to upload or drag and drop"}</p>
+              <div
+                className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
+                  file
+                    ? "border-emerald-300 bg-emerald-50/50"
+                    : "border-gray-300 hover:border-emerald-300 hover:bg-emerald-50/30"
+                } ${isSubmitting ? "opacity-60" : ""}`}
+              >
+                <Upload
+                  className={`w-6 h-6 mx-auto mb-2 ${
+                    file ? "text-emerald-500" : "text-gray-400"
+                  }`}
+                />
+                <p className="text-sm text-gray-600">
+                  {file ? file.name : "Click to upload or drag and drop"}
+                </p>
               </div>
             </div>
           </div>
@@ -264,26 +360,35 @@ export default function ReportIssue() {
             onClick={handleSubmit}
             disabled={isSubmitting}
             className={`w-full py-3 px-4 rounded-lg font-medium text-white shadow-sm transition-all ${
-              isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 hover:shadow-md"
-            }`}>
+              isSubmitting
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 hover:shadow-md"
+            }`}
+          >
             {isSubmitting ? (
               <div className="flex items-center justify-center">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
                 Submitting...
               </div>
-            ) : ("Submit Report")}
+            ) : (
+              "Submit Report"
+            )}
           </button>
 
           {submitStatus === "success" && (
             <div className="flex items-center space-x-2 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
               <CheckCircle className="w-5 h-5 text-emerald-600" />
-              <span className="text-sm text-emerald-700">Report submitted successfully!</span>
+              <span className="text-sm text-emerald-700">
+                Report submitted successfully!
+              </span>
             </div>
           )}
           {submitStatus === "error" && (
             <div className="flex items-center space-x-2 p-3 bg-red-50 border border-red-200 rounded-lg">
               <AlertCircle className="w-5 h-5 text-red-600" />
-              <span className="text-sm text-red-700">Failed to submit. Please check errors.</span>
+              <span className="text-sm text-red-700">
+                Failed to submit. Please check errors.
+              </span>
             </div>
           )}
         </div>
