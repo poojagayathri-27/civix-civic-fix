@@ -19,17 +19,17 @@ const app = express();
 app.use(
   cors({
     origin: [
+      "https://civix-civic-fix.vercel.app",  // ✅ your live frontend
       "http://localhost:3000",
       "http://127.0.0.1:3000",
       "http://localhost:5173",
       "http://127.0.0.1:5173",
-      "https://civix-frontend.vercel.app", // ✅ your frontend deployment
-      "https://civix-sqp4.onrender.com",   // ✅ backend live URL
     ],
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   })
 );
+
 
 // =======================
 // ✅ MIDDLEWARES
