@@ -37,12 +37,15 @@ app.get("/", (req, res) => {
 
 // ✅ MongoDB connection
 mongoose
-  .connect("mongodb://127.0.0.1:27017/civicfix")
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("✅ MongoDB connected to civicfix database");
-    console.log("Database Name:", mongoose.connection.name);
   })
   .catch((err) => console.error("❌ MongoDB connection error:", err));
+
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
