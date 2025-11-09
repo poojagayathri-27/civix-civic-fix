@@ -1,55 +1,73 @@
+// =======================
+// ✅ IMPORTS
+// =======================
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config(); // ✅ Load environment variables
 const issueRoutes = require("./routes/issues");
 
+// =======================
+// ✅ INITIALIZE APP
+// =======================
 const app = express();
 
-// ✅ CORS — allow frontend on civix-sqp4.onrender.com:3000
+// =======================
+// ✅ CORS CONFIGURATION
+// =======================
 app.use(
   cors({
     origin: [
-      "http://civix-sqp4.onrender.com:3000",
+      "http://localhost:3000",
       "http://127.0.0.1:3000",
-      "http://civix-sqp4.onrender.com:5173",
+      "http://localhost:5173",
       "http://127.0.0.1:5173",
-      "https://civix-frontend.vercel.app"
-      ],
+      "https://civix-frontend.vercel.app", // ✅ your frontend deployment
+      "https://civix-sqp4.onrender.com",   // ✅ backend live URL
+    ],
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   })
 );
 
-// ✅ Middleware for JSON + form handling
+// =======================
+// ✅ MIDDLEWARES
+// =======================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Serve static uploads (if any files are stored locally)
+// Serve static files (uploads, etc.)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// ✅ API routes
+// =======================
+// ✅ ROUTES
+// =======================
 app.use("/api/issues", issueRoutes);
 
-// ✅ Default route to confirm backend is running
+// Default route to test backend
 app.get("/", (req, res) => {
-  res.send("Civix backend is running 🚀");
+  res.send("🚀 Civix backend is running successfully!");
 });
 
-// ✅ MongoDB connection
+// =======================
+// ✅ DATABASE CONNECTION
+// =======================
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) {
+  console.error("❌ Error: MONGO_URI is missing in your .env file!");
+  process.exit(1);
+}
+
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("✅ MongoDB connected to civicfix database");
-  })
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected to civicfix database"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-
-// ✅ Start server
+// =======================
+// ✅ START SERVER
+// =======================
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://civix-sqp4.onrender.com:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
