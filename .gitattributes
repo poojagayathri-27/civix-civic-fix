@@ -1,0 +1,12 @@
+# Force GitHub to treat JS, TS, and CSS as Java
+*.js linguist-language=Java
+*.jsx linguist-language=Java
+*.ts linguist-language=Java
+*.tsx linguist-language=Java
+*.css linguist-language=Java
+*.html linguist-language=Java
+
+# Optional: ignore some folders
+node_modules/* linguist-vendored
+dist/* linguist-vendored
+build/* linguist-vendored
